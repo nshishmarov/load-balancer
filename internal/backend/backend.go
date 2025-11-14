@@ -3,14 +3,16 @@ package backend
 import (
 	"net/url"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
 type Backend struct {
 	URL *url.URL
-	State bool
-	Connections int64
-	ResponseTime time.Duration
+	state bool
+	connections int64
+	responseTime time.Duration
+	nextBck *Backend
 	mu sync.RWMutex
 }
 
@@ -21,6 +23,30 @@ func NewBackend(stringUrl string) (*Backend, error) {
 	}
 	return &Backend{
 		URL: u,
-		State: true,
+		state: true,
 	}, nil
+}
+
+func (b *Backend) SetState(state bool) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	b.state = state
+}
+
+func (b *Backend) GetState() bool {
+	b.mu.RLock()
+	defer b.mu.RUnlock()
+	return b.state
+}
+
+func (b *Backend) AddConnection() {
+	atomic.AddInt64(&b.connections, 1)
+}
+
+func (b *Backend) RemoveConnection() {
+	atomic.AddInt64(&b.connections, -1)
+}
+
+func (b *Backend) GetResponseTime() time.Duration {
+	return b.responseTime
 }

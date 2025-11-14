@@ -50,3 +50,7 @@ func (b *Backend) RemoveConnection() {
 func (b *Backend) GetResponseTime() time.Duration {
 	return b.responseTime
 }
+
+func (b *Backend) SetResponseTime(responseTime time.Duration) {
+	b.responseTime = responseTime
+}

@@ -51,3 +51,7 @@ func (s *ServerPool) GetNextBackend() *Backend {
 
 	return currBck
 }
+
+func (s *ServerPool) GetHeadBackend() *Backend {
+	return s.headBck
+}

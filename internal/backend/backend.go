@@ -54,3 +54,7 @@ func (b *Backend) GetResponseTime() time.Duration {
 func (b *Backend) SetResponseTime(responseTime time.Duration) {
 	b.responseTime = responseTime
 }
+
+func (b *Backend) GetNextBackend() *Backend {
+	return b.nextBck
+}
